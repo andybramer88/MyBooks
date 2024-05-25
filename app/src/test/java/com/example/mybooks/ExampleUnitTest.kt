@@ -1,4 +1,4 @@
-package com.example.movieappmad24
+package com.example.mybooks
 
 import org.junit.Test
 
