@@ -61,142 +61,14 @@ import androidx.compose.ui.unit.sp
 import com.example.mybooks.R
 import com.example.mybooks.models.Book
 import com.example.mybooks.models.getBooks
+import com.example.mybooks.navigation.Navigation
 import com.example.mybooks.ui.theme.MyBookAppTheme
 
 class MainActivity : ComponentActivity() {
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MyBookAppTheme {
-                // A surface container using the 'background' color from the theme
-                Scaffold (
-                    topBar = {
-                        CenterAlignedTopAppBar(
-                            title = { Text("MyBooks App")},
-                            colors = TopAppBarDefaults.topAppBarColors(
-                                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                                titleContentColor = MaterialTheme.colorScheme.primary
-                            )
-                        )
-                    },
-                    bottomBar = {
-                        NavigationBar {
-                            NavigationBarItem(
-                                label = { Text("Meine Lieblingsbücher") },
-                                selected = true,
-                                onClick = { /*TODO*/ },
-                                icon = { Icon(
-                                    imageVector = Icons.Filled.Menu,
-                                    contentDescription = "Go to home"
-                                )}
-                            )
-                            NavigationBarItem(
-                                label = { Text("Neues Buch anlegen/bearbeiten") },
-                                selected = false,
-                                onClick = { /*TODO*/ },
-                                icon = { Icon(
-                                    imageVector = Icons.Filled.Edit,
-                                    contentDescription = "Go to watchlist"
-                                )}
-                            )
-                        }
-                    }
-                ){ innerPadding ->
-                    BookList(
-                        modifier = Modifier.padding(innerPadding),
-                        books = getBooks()
-                    )
-                }
-            }
+            Navigation()
         }
-    }
-}
-
-@Composable
-fun BookList(modifier: Modifier, books: List<Book> = getBooks()){
-    LazyColumn(modifier = modifier) {
-        items(books) { book ->
-            BookRow(book)
-        }
-    }
-}
-
-@Composable
-fun BookRow(book: Book){
-    var showDetails by remember {
-        mutableStateOf(false)
-    }
-
-    Card(modifier = Modifier
-        .fillMaxWidth()
-        .padding(5.dp),
-        shape = ShapeDefaults.Large,
-        elevation = CardDefaults.cardElevation(10.dp)
-    ) {
-        Column {
-            BookDetails(modifier = Modifier.padding(12.dp), book = book)
-        }
-    }
-}
-
-@Composable
-fun BookDetails(modifier: Modifier, book: Book) {
-    var showDetails by remember {
-        mutableStateOf(false)
-    }
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(6.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(text = "${book.title} von ${book.author}")
-        Icon(modifier = Modifier
-            .clickable {
-                showDetails = !showDetails
-            },
-            imageVector =
-            if (showDetails) Icons.Filled.KeyboardArrowDown
-            else Icons.Default.KeyboardArrowUp, contentDescription = "show more")
-    }
-
-
-    AnimatedVisibility(
-        visible = showDetails,
-        enter = fadeIn(),
-        exit = fadeOut()
-    ) {
-        Column (modifier = modifier) {
-            Text(text = "ID Nummer: ${book.id}", style = MaterialTheme.typography.bodySmall)
-            Text(text = "Jahr: ${book.year}", style = MaterialTheme.typography.bodySmall)
-            Text(text = "ISBN: ${book.isbn}", style = MaterialTheme.typography.bodySmall)
-            Text(text = "noch nicht gelesen: ${book.read}", style = MaterialTheme.typography.bodySmall)
-        }
-    }
-}
-
-@Composable
-fun FavoriteIcon() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(10.dp),
-        contentAlignment = Alignment.TopEnd
-    ){
-        Icon(
-            tint = MaterialTheme.colorScheme.secondary,
-            imageVector = Icons.Default.FavoriteBorder,
-            contentDescription = "Add to favorites")
-    }
-}
-
-@Preview
-@Composable
-fun DefaultPreview(){
-    MyBookAppTheme {
-        BookList(modifier = Modifier, books = getBooks())
     }
 }
