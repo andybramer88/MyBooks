@@ -16,13 +16,40 @@ import com.example.mybooks.viewmodels.BooksViewModel
 @Composable
 fun AddChangeBookForm(
     navController: NavController,
-    viewModel: BooksViewModel
+    viewModel: BooksViewModel,
+    bookId: String?
 ) {
-    var title by remember { mutableStateOf("") }
-    var author by remember { mutableStateOf("") }
-    var year by remember { mutableStateOf("") }
-    var isbn by remember { mutableStateOf("") }
-    var read by remember { mutableStateOf(false) }
+    var existingTitle: String = ""
+    var existingAuthor: String = ""
+    var existingYear: String = ""
+    var existingIsbn: String = ""
+    var existingRead: Boolean = false
+
+    if (bookId != null) {
+        if (viewModel.bookExists(bookId)) run {
+            var book = viewModel.getBookById(bookId)
+            if (book != null) {
+                existingTitle = book.title
+            }
+            if (book != null) {
+                existingAuthor = book.author
+            }
+            if (book != null) {
+                existingYear = book.year.toString()
+            }
+            if (book != null) {
+                existingIsbn = book.isbn
+            }
+            if (book != null) {
+                existingRead = book.read
+            }
+        }
+    }
+    var title by remember { mutableStateOf(existingTitle) }
+    var author by remember { mutableStateOf(existingAuthor) }
+    var year by remember { mutableStateOf(existingYear) }
+    var isbn by remember { mutableStateOf(existingIsbn) }
+    var read by remember { mutableStateOf(existingRead) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
     fun validateInput(): Boolean {
@@ -109,8 +136,20 @@ fun AddChangeBookForm(
         Button(
             onClick = {
                 if (validateInput()) {
-                    // Rufe die Funktion addBook auf und übergebe die eingegebenen Daten
-                    viewModel.addBook(title, author, year.toInt(), isbn, read)
+                    if (bookId != null) {
+                        if (viewModel.bookExists(bookId)) {
+                            viewModel.editBook(
+                                id = bookId,
+                                isbn = isbn,
+                                author = author,
+                                title = title,
+                                year = year.toInt(),
+                                read = read
+                            )
+                        } else {
+                            viewModel.addBook(title, author, year.toInt(), isbn, read)
+                        }
+                    }
                     navController.navigateUp() // Zurück zur vorherigen Seite navigieren
                 }
             },
@@ -120,5 +159,3 @@ fun AddChangeBookForm(
         }
     }
 }
-
-

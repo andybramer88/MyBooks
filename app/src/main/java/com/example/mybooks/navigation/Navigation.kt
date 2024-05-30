@@ -22,8 +22,10 @@ fun Navigation() {
         composable(route = Screen.HomeScreen.route){   // route with name "homescreen" navigates to HomeScreen composable
             HomeScreen(navController = navController, viewModel = viewModel)
         }
-        composable(route = Screen.AddChangeBookScreen.route){
-            AddChangeBookScreen(navController = navController, booksViewModel = viewModel)
+        composable(arguments = listOf(navArgument(name = DETAIL_ARGUMENT_KEY) {type = NavType.StringType}),
+            route = Screen.AddChangeBookScreen.route){ backStackEntry ->
+            AddChangeBookScreen(bookId = backStackEntry.arguments?.getString(DETAIL_ARGUMENT_KEY),
+                navController = navController, booksViewModel = viewModel)
         }
     }
 }

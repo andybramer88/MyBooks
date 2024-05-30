@@ -14,7 +14,8 @@ import com.example.mybooks.widgets.SimpleTopAppBar
 @Composable
 fun AddChangeBookScreen(
     navController: NavController,
-    booksViewModel: BooksViewModel
+    booksViewModel: BooksViewModel,
+    bookId: String?
 ) {
     Scaffold(
         topBar = {
@@ -32,7 +33,7 @@ fun AddChangeBookScreen(
                 .padding(innerPadding)
                 .padding(top = 16.dp) // Abstand von der TopAppBar
         ) {
-            AddChangeBookForm(navController = navController, viewModel = booksViewModel)
+            AddChangeBookForm(navController = navController, viewModel = booksViewModel, bookId = bookId)
         }
     }
 }

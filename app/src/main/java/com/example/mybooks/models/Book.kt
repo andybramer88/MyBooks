@@ -1,12 +1,10 @@
 package com.example.mybooks.models
 
-import androidx.compose.runtime.mutableStateListOf
-
 data class Book(
-    val id: String,
-    val title: String,
-    val author: String,
-    val year: Int,
-    val isbn: String,
-    val read: Boolean
+    var id: String,
+    var title: String,
+    var author: String,
+    var year: Int,
+    var isbn: String,
+    var read: Boolean
 )

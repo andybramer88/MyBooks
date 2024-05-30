@@ -63,8 +63,8 @@ fun BookList(
                     onMarkAsRead = { updatedBook ->
                         viewModel.updateBookState(updatedBook)
                     },
-                    onEdit = {
-                        navController.navigate(Screen.AddChangeBookScreen.createRoute(book.id))
+                    onEdit = { bookId ->
+                        navController.navigate(Screen.AddChangeBookScreen.createRoute(bookId))
                     }
                 )
             }
@@ -79,7 +79,7 @@ fun BookItem(
     book: Book,
     onDelete: (Book) -> Unit,
     onMarkAsRead: (Book) -> Unit,
-    onEdit: () -> Unit,
+    onEdit: (String) -> Unit,
 ) {
     Card(
         modifier = Modifier
@@ -113,7 +113,7 @@ fun BookItem(
                 }
                 // Schaltfläche zum Bearbeiten des Buches
                 IconButton(
-                    onClick = { onEdit() },
+                    onClick = { onEdit(book.id) },
                     modifier = Modifier.align(Alignment.CenterVertically)
                 ) {
                     Icon(Icons.Default.Edit, contentDescription = "Bearbeiten")

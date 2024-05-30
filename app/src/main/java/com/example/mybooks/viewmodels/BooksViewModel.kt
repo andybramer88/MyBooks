@@ -18,6 +18,16 @@ class BooksViewModel: ViewModel() {
         filterBooks("") // Zurücksetzen des Filters
     }
 
+    fun editBook(id: String, isbn: String, author: String, title: String, year: Int, read: Boolean) {
+        _books.find { it.id == id }?.let { book ->
+            book.author = author
+            book.title = title
+            book.year = year
+            book.isbn = isbn
+            book.read = read
+        }
+    }
+
     fun updateBookState(updatedBook: Book) {
         val bookIndex = _books.indexOfFirst { it.id == updatedBook.id }
         if (bookIndex != -1) {
@@ -74,5 +84,13 @@ class BooksViewModel: ViewModel() {
                         it.author.lowercase().contains(lowerCaseQuery)
             })
         }
+    }
+
+    val bookExists: (String) -> Boolean = { bookid ->
+        _books.any { it.id == bookid }
+    }
+
+    fun getBookById(id: String): Book? {
+        return books.find { it.id == id }
     }
 }
