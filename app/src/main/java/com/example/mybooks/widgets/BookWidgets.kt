@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.mybooks.models.Book
+import com.example.mybooks.navigation.Screen
 import com.example.mybooks.viewmodels.BooksViewModel
 
 
@@ -63,7 +64,7 @@ fun BookList(
                         viewModel.updateBookState(updatedBook)
                     },
                     onEdit = {
-                        navController.navigate("addChangeBook/${book.id}")
+                        navController.navigate(Screen.AddChangeBookScreen.createRoute(book.id))
                     }
                 )
             }
@@ -121,43 +122,6 @@ fun BookItem(
         }
     }
 }
-
-/*
-@Composable
-fun BookRow(book: Book){
-    var showDetails by remember {
-        mutableStateOf(false)
-    }
-
-    Card(modifier = Modifier
-        .fillMaxWidth()
-        .padding(5.dp),
-        shape = ShapeDefaults.Large,
-        elevation = CardDefaults.cardElevation(10.dp)
-    ) {
-        Column {
-            BookDetails(modifier = Modifier.padding(12.dp), book = book)
-            FavoriteIcon()
-        }
-    }
-}
-
-@Composable
-fun FavoriteIcon() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(10.dp),
-        contentAlignment = Alignment.TopEnd
-    ){
-        Icon(
-            tint = MaterialTheme.colorScheme.secondary,
-            imageVector = Icons.Default.Create,
-            contentDescription = "Add to favorites")
-    }
-}
-*/
-
 
 @Composable
 fun BookDetails(modifier: Modifier, book: Book) {

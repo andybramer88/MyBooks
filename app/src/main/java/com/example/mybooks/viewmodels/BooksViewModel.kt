@@ -15,14 +15,6 @@ class BooksViewModel: ViewModel() {
         val newBook = Book(id, title, author, year, isbn, read)
         _books.add(newBook) // Füge das neue Buch zur Liste hinzu
     }
-/*
-    fun getBooks(): List<Book> {
-        return if (_books.isEmpty()) {
-            emptyList()
-        } else {
-            _books
-        }
-    }*/
 
     fun updateBookState(updatedBook: Book) {
         val bookIndex = _books.indexOfFirst { it.id == updatedBook.id }
@@ -55,5 +47,13 @@ class BooksViewModel: ViewModel() {
         val calculatedCheckDigit = if (remainder == 0) 0 else 10 - remainder
 
         return checkDigit == calculatedCheckDigit
+    }
+
+    fun sortBooksByYearAscending() {
+        _books.sortBy { it.year }
+    }
+
+    fun sortBooksByYearDescending() {
+        _books.sortByDescending { it.year }
     }
 }
