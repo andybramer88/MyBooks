@@ -14,9 +14,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.ThumbUp
@@ -38,18 +37,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.mybooks.models.Book
-import com.example.mybooks.models.bookList
-import com.example.mybooks.models.getBooks
+import com.example.mybooks.viewmodels.BooksViewModel
+
 
 @Composable
 fun BookList(
     modifier: Modifier,
-    books: List<Book> = getBooks(),
-    navController: NavController
+    books: List<Book>,
+    navController: NavController,
+    viewModel: BooksViewModel
 ){
     if (books.isEmpty()) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text("Keine Bücher vorhanden")
+            Text("Es wurden noch keine Bücher angelegt.")
         }
     } else {
         LazyColumn(modifier = modifier) {
@@ -57,37 +57,28 @@ fun BookList(
                 BookItem(
                     book = book,
                     onDelete = { updatedBook ->
-                        deleteBook(updatedBook)
+                        viewModel.deleteBook(updatedBook)
                     },
                     onMarkAsRead = { updatedBook ->
-                        updateBookState(updatedBook)
+                        viewModel.updateBookState(updatedBook)
                     },
-                    onClick = { navController.navigate("addChangeBook/${book.id}") }
+                    onEdit = {
+                        navController.navigate("addChangeBook/${book.id}")
+                    }
                 )
             }
         }
     }
 }
 
-fun updateBookState(updatedBook: Book) {
-    val bookIndex = bookList.indexOfFirst { it.id == updatedBook.id }
-    if (bookIndex != -1) {
-        // Das Buch in der Liste aktualisieren
-        bookList[bookIndex] = updatedBook.copy(read = !updatedBook.read)
-    }
-}
 
-fun deleteBook(book: Book) {
-    // Das Buch aus der Liste entfernen
-    bookList.remove(book)
-}
 
 @Composable
 fun BookItem(
     book: Book,
     onDelete: (Book) -> Unit,
     onMarkAsRead: (Book) -> Unit,
-    onClick: () -> Unit
+    onEdit: () -> Unit,
 ) {
     Card(
         modifier = Modifier
@@ -119,11 +110,19 @@ fun BookItem(
                 ) {
                     Icon(Icons.Default.Delete, contentDescription = "Löschen")
                 }
+                // Schaltfläche zum Bearbeiten des Buches
+                IconButton(
+                    onClick = { onEdit() },
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                ) {
+                    Icon(Icons.Default.Edit, contentDescription = "Bearbeiten")
+                }
             }
         }
     }
 }
 
+/*
 @Composable
 fun BookRow(book: Book){
     var showDetails by remember {
@@ -157,6 +156,8 @@ fun FavoriteIcon() {
             contentDescription = "Add to favorites")
     }
 }
+*/
+
 
 @Composable
 fun BookDetails(modifier: Modifier, book: Book) {

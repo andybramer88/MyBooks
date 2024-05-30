@@ -11,10 +11,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.mybooks.models.addBook
+import com.example.mybooks.viewmodels.BooksViewModel
 
 @Composable
-fun AddChangeBookForm(navController: NavController) {
+fun AddChangeBookForm(
+    navController: NavController,
+    viewModel: BooksViewModel
+) {
     var title by remember { mutableStateOf("") }
     var author by remember { mutableStateOf("") }
     var year by remember { mutableStateOf("") }
@@ -36,7 +39,7 @@ fun AddChangeBookForm(navController: NavController) {
                 errorMessage = "Das Jahr muss gültig sein und darf nicht in der Zukunft liegen."
                 false
             }
-            !isValidISBN(isbn) -> {
+            !viewModel.isValidISBN(isbn) -> {
                 errorMessage = "Die ISBN ist nicht gültig."
                 false
             }
@@ -107,7 +110,7 @@ fun AddChangeBookForm(navController: NavController) {
             onClick = {
                 if (validateInput()) {
                     // Rufe die Funktion addBook auf und übergebe die eingegebenen Daten
-                    addBook(title, author, year.toInt(), isbn, read)
+                    viewModel.addBook(title, author, year.toInt(), isbn, read)
                     navController.navigateUp() // Zurück zur vorherigen Seite navigieren
                 }
             },
@@ -118,24 +121,4 @@ fun AddChangeBookForm(navController: NavController) {
     }
 }
 
-fun isValidISBN(isbn: String): Boolean {
-    // Entfernen der Bindestriche
-    val sanitizedISBN = isbn.replace("-", "")
 
-    // Prüfen der Länge + ob alles Zahlen sind
-    if (sanitizedISBN.length != 13 || !sanitizedISBN.all { it.isDigit() }) {
-        return false
-    }
-
-    // Algorithmus zum Check
-    val checkDigit = sanitizedISBN.last().toString().toInt()
-    val sum = sanitizedISBN.take(12).mapIndexed { index, c ->
-        val digit = c.toString().toInt()
-        if (index % 2 == 0) digit else digit * 3
-    }.sum()
-
-    val remainder = sum % 10
-    val calculatedCheckDigit = if (remainder == 0) 0 else 10 - remainder
-
-    return checkDigit == calculatedCheckDigit
-}

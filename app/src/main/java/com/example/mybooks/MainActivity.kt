@@ -60,7 +60,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mybooks.R
 import com.example.mybooks.models.Book
-import com.example.mybooks.models.getBooks
 import com.example.mybooks.navigation.Navigation
 import com.example.mybooks.ui.theme.MyBookAppTheme
 

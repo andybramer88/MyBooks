@@ -6,12 +6,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.mybooks.viewmodels.BooksViewModel
 import com.example.mybooks.widgets.AddChangeBookForm
 import com.example.mybooks.widgets.SimpleBottomAppBar
 import com.example.mybooks.widgets.SimpleTopAppBar
 
 @Composable
-fun AddChangeBookScreen(navController: NavController) {
+fun AddChangeBookScreen(
+    navController: NavController,
+    booksViewModel: BooksViewModel
+) {
     Scaffold(
         topBar = {
             SimpleTopAppBar("Buch anlegen/ändern")
@@ -28,7 +32,7 @@ fun AddChangeBookScreen(navController: NavController) {
                 .padding(innerPadding)
                 .padding(top = 16.dp) // Abstand von der TopAppBar
         ) {
-            AddChangeBookForm(navController = navController)
+            AddChangeBookForm(navController = navController, viewModel = booksViewModel)
         }
     }
 }

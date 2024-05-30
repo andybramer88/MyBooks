@@ -5,13 +5,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import com.example.mybooks.models.getBooks
+import com.example.mybooks.viewmodels.BooksViewModel
 import com.example.mybooks.widgets.BookList
 import com.example.mybooks.widgets.SimpleBottomAppBar
 import com.example.mybooks.widgets.SimpleTopAppBar
 
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(
+    navController: NavController,
+    viewModel: BooksViewModel
+) {
     Scaffold (
         topBar = {
             SimpleTopAppBar("MyBooks")
@@ -24,8 +27,10 @@ fun HomeScreen(navController: NavController) {
     ){ innerPadding ->
         BookList(
             modifier = Modifier.padding(innerPadding),
-            books = getBooks(),
-            navController = navController
+            navController = navController,
+            viewModel = viewModel,
+            books = viewModel.books
+
         )
     }
 }
